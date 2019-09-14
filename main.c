@@ -1,23 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<math.h>
+#define N 3
+#define M 2
 //////////////////////////////////////////////////////////
-double dist(double x1, double y1, double x2, double y2);
+double dist(double coord1[], double coord2[], int m);
 double heron_area(double, double, double);
 void print(const wchar_t format[], double);
+void input(double coord[], int m, int i);
 //////////////////////////////////////////////////////////
 int main()
 {
-    double x1, y1, x2, y2, x3, y3,  //the coordinates of the vertices
-           a, b, c,                 //side of triangle
-           S;                       //area
+    double coord[N][M];             //the coordinates of the vertices
+    double a, b, c,                 //side of triangle
+           S;
+    int i;                          //area
 
-    wprintf(L"Enter the coordinates of the three vertices -> ");
-    scanf("%lf %lf %lf %lf %lf %lf", &x1, &y1, &x2, &y2, &x3, &y3);
 
-    a = dist(x1, y1, x2, y2);
-    b = dist(x2, y2, x3, y3);
-    c = dist(x3, y3, x1, y1);
+    for(i = 0; i < N; ++i)
+            input(coord[i], M, i+1);
+
+    a = dist(coord[0], coord[1], M);
+    b = dist(coord[1], coord[2], M);
+    c = dist(coord[2], coord[0], M);
 
     S = heron_area(a, b, c);
 
@@ -26,9 +31,13 @@ int main()
     return 0;
 }
 //////////////////////////////////////////////////////////
-double dist(double x1, double y1, double x2, double y2)
+double dist(double coord1[], double coord2[], int m)
 {
-    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+    double s = 0.0;
+    int j;
+    for(j = 0; j < m; ++j)
+        s += pow(coord1[j] - coord2[j], 2);
+    return sqrt(s);
 }
 //////////////////////////////////////////////////////////
 double heron_area(double a, double b, double c)
@@ -42,3 +51,15 @@ void print(const wchar_t format[], double s)
     wprintf(format, s);
 }
 //////////////////////////////////////////////////////////
+void input(double coord[], int m, int i)
+{
+    int j;
+    wprintf(L"Enter the coordinates of the point %d:\n", i);
+    for(j = 0; j < m; ++j)
+    do
+    {
+        printf("%c = ", 'x' + j);
+        fflush(stdin);
+    }
+    while(scanf("%lg", &coord[j]) != 1);
+}
